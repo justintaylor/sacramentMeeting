@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Sacrament Meeting</title>
+		<style>
+            @media print {
+                .printHide, #date {
+                    display: none;
+                }
+                .printShow {
+                    display: block;
+                    margin-top: 0px;
+                }
+                textarea {
+                    border-color: white;
+                    resize: none;
+                    overflow: visible;
+                }
+                input[type=text] {
+                    border: none;
+                    display: inline-block;
+                }
+            }
+            .text, textarea, input[type=text] {
+                font-family: Verdana,sans-serif;
+                font-size: 10px;
+                line-height: 1;
+            }
+            textarea {
+                width: 100%;
+                display: inline-block;
+            }
+            table, .padding {
+                padding-bottom: 10px;
+            }
+            input[type=text] {
+                width: 300px;
+            }
+            label {
+                font-weight: bold;
+            }
+            h2 {
+                text-align: center;
+            }
+            .textarea {
+              padding-top: 5px;
+            }
+            .wrapper {
+              margin-top: 3px;
+              padding-left: 3px;
+              margin-bottom: 18px;
+            }
+            .button {
+              width: 100px;
+              margin-left: 30px;
+            }
+        </style>
+        <script src="libs/moment.min.js" type="text/javascript"> </script>
+        <script>
+            var allItems = [
+              "attending",
+              "date",
+              "attendance",
+              "presiding",
+              "conducting",
+              "announcements",
+              "oHymn",
+              "oPrayer",
+              "business",
+              "sHymn",
+              "sPrayer",
+              "passed",
+              "doors",
+              "ySpeaker",
+              "speaker",
+              "hymnMusical",
+              "speaker2",
+              "comments",
+              "cHymn",
+              "cPrayer"
+            ];
+            var textAreas = [
+              "attending",
+              "announcements",
+              "business",
+              "passed",
+              "ySpeaker",
+              "speaker",
+              "speaker2",
+              "comments"
+            ];
+            function printPage() {
+                // update title with date if manually changed
+                var date = document.getElementById('date');
+                var title = document.getElementById('title');
+                title.innerText = "Sacrament Meeting - " + date.value;
+
+                // copy data from textarea into paragraphs
+                // TODO: Make dynamic, get a list of all textareas, and dynamicly add paragraphs (and text into them) after each textarea
+                for(i = 0; i < textAreas.length; i++)
+                {
+                  document.getElementById(textAreas[i] + "Display").innerText = document.getElementById(textAreas[i]).value;
+                }
+
+                window.print();
+            }
+            function saveToStorage() {
+              // TODO: Save individual fields when the field looses focus, instead of all fields
+              for(i = 0; i < allItems.length; i++) {
+                  localStorage[allItems[i]] = document.getElementById(allItems[i]).value;
+              }
+            }
+            function clearStorage() {
+              localStorage.clear();
+              document.location.reload(false);
+            }
+            function loadFromStorage() {
+              var value = "";
+              for(i = 0; i < allItems.length; i++) {
+                value = localStorage[allItems[i]];
+                if(value) {
+                  document.getElementById(allItems[i]).value = value;
+                }
+              }
+            }
+        </script>
+    </head>
+    <body class="text">
+        <h2 id="title">SACRAMENT MEETING</h2>
+        <hr>
+        <form class="text">
+            <div class="wrapper">
+              <label for="attending">Attending (Stake Visitors, etc.):</label>
+              <div class="textarea">
+                <textarea rows="3" cols="65" class="printHide" id="attending" autofocus></textarea>
+              </div>
+              <p class="printShow" id="attendingDisplay"></p>
+            </div>
+            
+            <table>
+              <tr>
+                <td class="printHide">
+                  <label for="date" class="printHide">Date:</label>
+                </td>
+                <td>
+                  <label for="attendance">Attendance:</label>
+                </td>
+              </tr>
+              <tr>
+                <td class="printHide padding">
+                  <input type="text" id="date">
+                </td>
+                <td class="padding">
+                  <input type="text" id="attendance">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label for="presiding">Presiding:</label>
+                </td>
+                <td>
+                  <label for="conducting">Conducting:</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" id="presiding">
+                </td>
+                <td>
+                  <input type="text" id="conducting">
+                </td>
+              </tr>
+            </table>
+            
+            <div class="wrapper">
+              <label for="announcements">Announcements:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="announcements" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="announcementsDisplay"></p>
+            </div>
+
+            <table>
+              <tr>
+                <td>
+                  <label for="oHymn">Opening Hymn:</label>
+                </td>
+                <td>
+                  <label for="oPrayer">Opening Prayer:</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" id="oHymn">
+                </td>
+                <td>
+                  <input type="text" id="oPrayer">
+                </td>
+              </tr>
+            </table>
+            
+            <div class="wrapper">
+              <label for="business">Business:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="business" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="businessDisplay"></p>
+            </div>
+            
+            <table>
+              <tr>
+                <td>
+                  <label for="sHymn">Sacrament Hymn:</label>
+                </td>
+                <td>
+                  <label for="sPrayer">Sacrament Prayer:</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" id="sHymn">
+                </td>
+                <td>
+                  <input type="text" id="sPrayer">
+                </td>
+              </tr>
+            </table>
+            
+            <div class="wrapper">
+              <label for="passed">Passed Sacrament:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="passed" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="passedDisplay"></p>
+            </div>
+            
+            <div class="wrapper">
+              <label for="doors">Doors:</label>
+              <div class="textarea">
+                <input type="text" id="doors" class="printHide">
+              </div>
+            </div>
+            
+            <div class="wrapper">
+              <label for="ySpeaker">Youth Speaker:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="ySpeaker" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="ySpeakerDisplay"></p>
+            </div>
+            
+            <div class="wrapper">
+              <label for="speaker">Speaker:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="speaker" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="speakerDisplay"></p>
+            </div>
+            
+            <div class="wrapper">
+              <label for="hymnMusical">Rest Hymn or Musical Number:</label>
+              <div class="textarea">
+                <input type="text" id="hymnMusical">
+              </div>
+            </div>
+            
+            <div class="wrapper">
+              <label for="speaker2">Speaker:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="speaker2" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="speaker2Display"></p>
+            </div>
+            
+            <div class="wrapper">  
+              <label for="comments">Closing Comments:</label>
+              <div class="textarea">
+                <textarea rows="3" cols="45" id="comments" class="printHide"></textarea>
+              </div>
+              <p class="printShow" id="commentsDisplay"></p>
+            </div>
+            
+            <table>
+              <tr>
+                <td>
+                  <label for="cHymn">Closing Hymn:</label>
+                </td>
+                <td>
+                  <label for="cPrayer">Closing Prayer:</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" id="cHymn">
+                </td>
+                <td>
+                  <input type="text" id="cPrayer">
+                </td>
+              </tr>
+            </table>
+        </form>
+        
+        <span class="printHide">
+          <hr>
+          <input type="button" value="Print this page" onclick="printPage()" />
+          <input type="button" value="Save" class="button" onclick="saveToStorage()" />
+          <input type="button" value="Clear" class="button" onclick="clearStorage()" />
+        </span>
+        
+        <script type="text/javascript">
+            var element = document.getElementById('date');
+            var now = moment().format("MMM DD, YYYY");
+            element.value =  now;
+            var title = document.getElementById('title');
+            title.innerText = "Sacrament Meeting - " + now;
+
+            loadFromStorage();
+
+            //add blur events to all
+            var el = "";
+            for(i = 0; i < allItems.length; i++) {
+              el = document.getElementById(allItems[i]);
+              el.addEventListener("blur", function(){saveToStorage()}, false);
+            }
+        </script>
+  </body>
+</html>
